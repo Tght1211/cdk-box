@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %}管理后台 - CDK Box{% endblock %}
+{% block content %}
+<h2>创建新活动</h2>
+<div class="card">
+    <form method="POST" action="{{ url_for('create_activity') }}">
+        <input type="text" name="name" placeholder="活动名称" required>
+        <input type="text" name="description" placeholder="活动描述（可选）">
+        <textarea name="codes" placeholder="粘贴兑换码，每行一个" required rows="6"></textarea>
+        <button type="submit" class="btn btn-primary">创建活动</button>
+    </form>
+</div>
+
+<h2>活动管理</h2>
+{% for a in activities %}
+<div class="card">
+    <div class="card-header">
+        <div>
+            <h3>{{ a.name }}
+                <span class="badge {{ 'badge-done' if a.is_active else 'badge-empty' }}">
+                    {{ '进行中' if a.is_active else '已停止' }}
+                </span>
+            </h3>
+            <p class="stats">总计 {{ a.total }} | 已领 {{ a.claimed }} | 剩余 {{ a.remaining }}</p>
+        </div>
+        <div class="card-actions">
+            <form method="POST" action="{{ url_for('toggle_activity', activity_id=a.id) }}">
+                <button type="submit" class="btn btn-sm btn-secondary">{{ '停止' if a.is_active else '开启' }}</button>
+            </form>
+            <a href="{{ url_for('admin_activity_detail', activity_id=a.id) }}" class="btn btn-sm">详情</a>
+        </div>
+    </div>
+    <details>
+        <summary>补货</summary>
+        <form method="POST" action="{{ url_for('restock', activity_id=a.id) }}" class="restock-form">
+            <textarea name="codes" placeholder="粘贴兑换码，每行一个" required rows="4"></textarea>
+            <button type="submit" class="btn btn-primary">补货</button>
+        </form>
+    </details>
+</div>
+{% else %}
+<div class="card empty">暂无活动，请先创建</div>
+{% endfor %}
+{% endblock %}

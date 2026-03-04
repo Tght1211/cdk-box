@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block title %}{{ activity.name }} - 管理后台{% endblock %}
+{% block content %}
+<a href="{{ url_for('admin_dashboard') }}" class="back-link">&larr; 返回</a>
+<h2>{{ activity.name }}</h2>
+{% if activity.description %}<p class="desc">{{ activity.description }}</p>{% endif %}
+
+<div class="card">
+    <table class="detail-table">
+        <thead>
+            <tr>
+                <th>兑换码</th>
+                <th>状态</th>
+                <th>领取者</th>
+                <th>领取时间</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for c in cdks %}
+            <tr>
+                <td><code>{{ c.code }}</code></td>
+                <td>
+                    {% if c.claimed_by %}
+                        <span class="tag-claimed">已领取</span>
+                    {% else %}
+                        <span class="tag-unclaimed">未领取</span>
+                    {% endif %}
+                </td>
+                <td>{{ c.claimed_by or '-' }}</td>
+                <td>{{ c.claimed_at|dt }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

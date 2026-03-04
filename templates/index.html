@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %}CDK Box - 兑换码领取{% endblock %}
+{% block content %}
+<div class="card center-card">
+    <h1>CDK Box</h1>
+    <p class="subtitle">输入用户名即可领取兑换码</p>
+    <form method="POST" action="{{ url_for('login') }}">
+        <input type="text" name="username" placeholder="你的用户名" required autofocus maxlength="50">
+        <button type="submit" class="btn btn-primary full-width">进入</button>
+    </form>
+</div>
+{% endblock %}

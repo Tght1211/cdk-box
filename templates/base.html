@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}CDK Box{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <nav>
+        <div class="container nav-inner">
+            <a href="/" class="logo">CDK Box</a>
+            <div class="nav-right">
+                {% if session.get('is_admin') %}
+                    <a href="{{ url_for('admin_dashboard') }}">管理后台</a>
+                    <a href="{{ url_for('admin_logout') }}">退出管理</a>
+                {% elif session.get('username') %}
+                    <span class="nav-user">{{ session.username }}</span>
+                    <a href="{{ url_for('logout') }}">退出</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+    <main class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </main>
+    <script>
+    function copyCode(btn) {
+        const code = btn.previousElementSibling.textContent.trim();
+        navigator.clipboard.writeText(code).then(() => {
+            btn.textContent = '已复制';
+            setTimeout(() => btn.textContent = '复制', 1500);
+        });
+    }
+    </script>
+</body>
+</html>

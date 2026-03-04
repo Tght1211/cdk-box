@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}领取兑换码 - CDK Box{% endblock %}
+{% block content %}
+<h2>可领取的活动</h2>
+{% for a in activities %}
+<div class="card">
+    <div class="card-header">
+        <h3>{{ a.name }}</h3>
+        <span class="stats">剩余 <strong>{{ a.remaining }}</strong> / {{ a.total }}</span>
+    </div>
+    {% if a.description %}<p class="desc">{{ a.description }}</p>{% endif %}
+    {% if a.id in claimed_ids %}
+        <span class="badge badge-done">已领取</span>
+    {% elif a.remaining > 0 %}
+        <form method="POST" action="{{ url_for('claim', activity_id=a.id) }}">
+            <button type="submit" class="btn btn-primary">立即领取</button>
+        </form>
+    {% else %}
+        <span class="badge badge-empty">已领完</span>
+    {% endif %}
+</div>
+{% else %}
+<div class="card empty">暂无可领取的活动</div>
+{% endfor %}
+
+<h2>我的领取记录</h2>
+{% if history %}
+{% for item in history %}
+<div class="card">
+    <div class="card-header">
+        <h4>{{ item.activity_name }}</h4>
+        <small>{{ item.claimed_at|dt }}</small>
+    </div>
+    <div class="code-row">
+        <code class="cdk-code">{{ item.code }}</code>
+        <button class="btn btn-sm" onclick="copyCode(this)">复制</button>
+    </div>
+</div>
+{% endfor %}
+{% else %}
+<div class="card empty">暂无记录</div>
+{% endif %}
+{% endblock %}
