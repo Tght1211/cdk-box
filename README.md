@@ -37,16 +37,16 @@ bash setup.sh
 .venv/bin/python app.py
 ```
 
-打开浏览器访问 `http://localhost:5000`
+打开浏览器访问 `http://localhost:8099`
 
-管理后台：`http://localhost:5000/admin`（默认账号 `admin` / `change-me-please`）
+管理后台：`http://localhost:8099/admin`（默认账号 `admin` / `change-me-please`）
 
 > 首次启动后请在 `.env` 中修改管理员密码和 SECRET_KEY。
 
 ### 生产部署
 
 ```bash
-.venv/bin/gunicorn app:app -b 0.0.0.0:5000
+.venv/bin/gunicorn app:app -b 0.0.0.0:8099
 ```
 
 ## 配置说明
@@ -58,7 +58,7 @@ bash setup.sh
 | `ADMIN_USERNAME` | 管理员用户名 | `admin` |
 | `ADMIN_PASSWORD` | 管理员密码 | `change-me-please` |
 | `SECRET_KEY` | Session 密钥 | 安装时自动生成 |
-| `PORT` | 监听端口 | `5000` |
+| `PORT` | 监听端口 | `8099` |
 | `DEBUG` | 调试模式 | `false` |
 
 ## 项目结构

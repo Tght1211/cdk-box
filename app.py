@@ -330,6 +330,6 @@ def admin_logout():
 
 if __name__ == "__main__":
     init_db()
-    port = int(os.getenv("PORT", 5000))
+    port = int(os.getenv("PORT", 8099))
     debug = os.getenv("DEBUG", "false").lower() == "true"
     app.run(host="0.0.0.0", port=port, debug=debug)
