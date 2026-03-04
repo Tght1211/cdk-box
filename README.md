@@ -24,7 +24,7 @@
 ### 一键安装
 
 ```bash
-git clone https://github.com/你的用户名/cdk-box.git
+git clone https://github.com/Tght1211/cdk-box.git
 cd cdk-box
 bash setup.sh
 ```
