@@ -13,6 +13,31 @@ load_dotenv()
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY", "please-change-me")
 
+# ── Embed / iframe 支持 ──────────────────────────────────────────────────────
+# EMBED_ORIGINS: 允许嵌入的来源，* 表示任意网站，也可指定如 https://example.com
+EMBED_ORIGINS = os.getenv("EMBED_ORIGINS", "")
+
+if EMBED_ORIGINS:
+    # 跨域 iframe 中 session cookie 需要 SameSite=None
+    app.config["SESSION_COOKIE_SAMESITE"] = "None"
+    app.config["SESSION_COOKIE_SECURE"] = True
+
+
+@app.after_request
+def set_embed_headers(response):
+    if not EMBED_ORIGINS:
+        return response
+    # 允许 iframe 嵌入
+    origins = EMBED_ORIGINS.strip()
+    if origins == "*":
+        response.headers["X-Frame-Options"] = "ALLOWALL"
+        response.headers["Content-Security-Policy"] = "frame-ancestors *"
+    else:
+        # 指定来源，如 https://example.com https://other.com
+        response.headers.pop("X-Frame-Options", None)
+        response.headers["Content-Security-Policy"] = f"frame-ancestors {origins}"
+    return response
+
 DATABASE = os.path.join(os.path.dirname(__file__), "data.db")
 ADMIN_USERNAME = os.getenv("ADMIN_USERNAME", "admin")
 ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "admin123")
